@@ -1,18 +1,9 @@
-import type { ReactNode } from "react"
-import { TaskManagerFilterTabs } from "./filter-tabs"
-import { TaskManagerSearch } from "./search"
-
+import type { ReactNode } from "react";
 
 type TaskMangerFiltersProps = {
-    children: ReactNode
-}
+  children: ReactNode;
+};
 
-export const TaskMangerFilters = ({children}: TaskMangerFiltersProps) => {
-    return (
-        <>
-            {
-                children
-        }
-        </>
-    )
-}
+export const TaskMangerFilters = ({ children }: TaskMangerFiltersProps) => {
+  return <>{children}</>;
+};
