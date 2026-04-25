@@ -63,10 +63,7 @@ export const DashboardContentGrid = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Users List Area */}
-
       <div className="lg:col-span-2 space-y-4">
-        {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
           <Input
@@ -78,16 +75,12 @@ export const DashboardContentGrid = () => {
           />
         </div>
 
-        {/* Loading State */}
         {renderLoader()}
 
-        {/* Error State */}
         {renderError()}
 
-        {/* Empty State */}
         {renderEmptyState()}
 
-        {/* Users List */}
         {users.length > 0 && (
           <div className="space-y-3">
             {paginatedUsers.map((user) => (
@@ -118,7 +111,6 @@ export const DashboardContentGrid = () => {
         </div>
       </div>
 
-      {/* User Details Section */}
       <div className="lg:col-span-1">
         {selectedUserId ? (
           <UserDetailsCard

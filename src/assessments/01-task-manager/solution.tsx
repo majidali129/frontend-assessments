@@ -13,15 +13,12 @@ import { getDataFromStorage, saveToStorage } from "@/utils"
 
 
 export const TaskManger = () => {
-    // ======================= Initialize tasks from local storage or use an empty array if no data is found ============
     const [tasks, setTasks] = useState<Task[]>(() => {
         const data = getDataFromStorage('tasks');
        return  data ? JSON.parse(data): []
     });
     const [query, setQuery] = useState('');
     const [filter, setFilter] = useState<Filter | null>('all') 
-    
-    // ================= Event handlers =================
     
     const handleCreateTask = (newTask: Task) => {
         setTasks(prevTasks => [newTask, ...prevTasks])
@@ -49,8 +46,6 @@ export const TaskManger = () => {
         setFilter(filter)
     }
 
-//  ================================= Filtering and searching tasks based on the current filter and search query =================
-
     let filteredTasks = filter === 'active' ? tasks.filter(t => t.status === 'in-progress') : filter === 'completed' ? tasks.filter(t => t.status === 'done') : tasks;
 
     filteredTasks = filteredTasks.filter(task => task.title.trim().toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))
@@ -61,8 +56,6 @@ export const TaskManger = () => {
         completed: tasks.filter(t => t.status === 'done').length,
         pending: tasks.filter(t => t.status === 'todo').length
     }
-
-    // ======================= Persist tasks to local storage as Component Mounts Very First Time =========================
 
     useEffect(() => {
         saveToStorage('tasks', taskList)

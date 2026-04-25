@@ -232,7 +232,6 @@ export const MOCK_USERS = [
   },
 ];
 
-// NOTE: We could use Observable pattern OR Some other approach to manage cache updates and re-render components when cache changes. But for simplicity, we are directly mutating the cache object here.
 type Cache = {
   [key: number]: unknown
 }
