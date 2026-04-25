@@ -1,73 +1,226 @@
-# React + TypeScript + Vite
+# Frontend Assessments Workspace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A scalable React + TypeScript workspace designed to implement and showcase multiple frontend assessments within a single codebase.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Overview
 
-## React Compiler
+This project acts as a **container application** that hosts multiple independent frontend assessments.
+Each assessment is treated as an isolated module with its own logic, UI, and data layer, while sharing a common infrastructure.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Objectives
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Keep assessments **isolated and maintainable**
+- Ensure **reusability** of components and utilities
+- Maintain a **clean and scalable architecture**
+- Provide a **single entry point** to preview all assessments
+- Avoid architectural clutter as the project grows
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **React (Vite) + TypeScript**
+- **Tailwind CSS** (UI styling)
+- **React Router** (navigation)
+- **React Query** (data fetching & caching)
+- Optional integrations per assessment (markdown, charts, etc.)
+
+---
+
+## Project Architecture
+
+```txt
+src/
+├── app/                  # Application shell (routing, layout, providers)
+├── assessments/          # Independent assessment modules
+├── shared/               # Reusable UI, hooks, utils, services
+├── features/             # Optional shared business logic
+├── styles/               # Global styles
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Core Concept
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. App Shell
+
+Handles:
+
+- Routing
+- Layout (header, container)
+- Global providers (React Query, etc.)
+
+### 2. Assessments (Feature Modules)
+
+Each assessment is a **self-contained mini-app**:
+
+```txt
+assessment-x/
+├── pages/
+├── components/
+├── hooks/
+├── services/
+├── types/
 ```
+
+Rules:
+
+- No cross-imports between assessments
+- Logic stays local unless reused elsewhere
+
+---
+
+### 3. Shared Layer
+
+```txt
+shared/
+├── components/ui/    # reusable UI (Button, Input, Card)
+├── hooks/            # reusable hooks
+├── utils/            # helper functions
+├── services/         # API client + base config
+├── types/            # common types
+```
+
+Used only when something is needed in **multiple assessments**.
+
+---
+
+## Assessment Registry
+
+All assessments are registered in a central file:
+
+```ts
+assessments / registry.ts;
+```
+
+This powers:
+
+- Routing
+- Home page listing
+- Lazy loading
+
+---
+
+## Routing Strategy
+
+- `/` → Home page (list of assessments)
+- `/assessment-x` → Individual assessment
+
+Each assessment is loaded **lazily** for performance.
+
+---
+
+## Data & API Strategy
+
+- API client lives in: `shared/services`
+- Feature-specific APIs live in: `assessment-x/services`
+- Mock/static data stays inside the respective assessment
+
+---
+
+## Best Practices
+
+### Keep Things Local First
+
+Only move to `shared/` if used in multiple places.
+
+---
+
+### Avoid Cross-Assessment Coupling
+
+❌ Do NOT:
+
+```ts
+import from "../assessment-2"
+```
+
+---
+
+### Separate Concerns
+
+| Layer       | Responsibility      |
+| ----------- | ------------------- |
+| app         | routing, providers  |
+| assessments | feature logic       |
+| shared      | reusable primitives |
+
+---
+
+### Use Effects Properly
+
+- `useEffect` → async side effects (API, subscriptions)
+- `useLayoutEffect` → DOM measurement / layout fixes only
+
+---
+
+## Adding a New Assessment
+
+1. Create a new folder:
+
+```txt
+src/assessments/assessment-x/
+```
+
+2. Add entry file:
+
+```ts
+index.tsx;
+```
+
+3. Register in:
+
+```ts
+assessments / registry.ts;
+```
+
+4. Add route automatically via registry
+
+---
+
+## Running the Project
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## Future Improvements
+
+- Markdown-based assessment descriptions
+- Preview + code side-by-side layout
+- Design system extraction
+- API SDK abstraction
+- Test setup per assessment
+
+---
+
+## Philosophy
+
+- Build small, isolated, testable modules
+- Share only what is truly reusable
+- Prefer clarity over premature abstraction
+- Optimize structure before optimizing code
+
+---
+
+## Summary
+
+This project is designed to:
+
+- Scale with multiple assessments
+- Stay maintainable over time
+- Demonstrate clean frontend architecture
+
+---
+
+## Author Notes
+
+This workspace is intentionally structured to reflect **real-world frontend engineering practices**, not just task-based implementations.
+
+---
