@@ -1,9 +1,9 @@
-import { UserDashboard } from "@/assessments/assessment-2";
+import { ProductExplorer } from "@/assessments/assessment-3";
 
 export const App = () => {
   return (
     <main className="min-h-screen p-10">
-      <UserDashboard />
+      <ProductExplorer />
     </main>
   );
 };

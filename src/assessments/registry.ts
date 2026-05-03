@@ -11,4 +11,10 @@ export const assessments = [
     path: "/assessment-2/user-dashboard",
     element: () => import("./assessment-2"),
   },
+  {
+    id: "assessment-3",
+    title: "Product Explorer",
+    path: "/assessment-3/product-explorer",
+    element: () => import("./assessment-3"),
+  },
 ];
